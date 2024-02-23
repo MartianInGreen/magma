@@ -3,3 +3,6 @@ litellm
 replicate
 flask
 docker
+tinydb
+bs4
+pyPDF2

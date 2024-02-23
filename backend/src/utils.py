@@ -1,5 +1,5 @@
 ### ----------------------------------------------------
-### File: main.py
+### File: utils.py
 ### Authors: Hannah Renners
 ### ----------------------------------------------------
 
@@ -7,15 +7,14 @@
 # Imports
 # ----------------------------------------------------
 
-import flask
-import docker
+import os
 
 # ----------------------------------------------------
-# App
+# Utility Functions
 # ----------------------------------------------------
 
-app = flask.Flask(__name__)
-
-@app.route('/code')
-def execute_code():
-    pass 
+def getEnvVar(var: str) -> str:
+    with open('../.env', 'r') as f:
+        for line in f:
+            if line.startswith(var):
+                return line.split('=')[1].strip()
