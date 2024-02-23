@@ -35,10 +35,10 @@ As part of that plan we support (custom) Plugins (with many already build in), c
     - [ ] Audio
 - [ ] Basic ai experience
   - [ ] Custom Models
-  - [ ] Custom Tools
-  - [ ] Custom Assistants
+  - [ ] Integrated Tools
   - [ ] Basic Chat Interface
   - [ ] Basic Notes Copilot
+  - [ ] **Code Interpreter**
 
 **Version 0.2.0 - Shield**
 - [ ] Expanding blocks
@@ -57,13 +57,13 @@ As part of that plan we support (custom) Plugins (with many already build in), c
   - [ ] Management Interface
   - [ ] Upgraded Chat
   - [ ] Upgraded Copilot
-  - [ ] Integrated Tools
-  - [ ] Code Interpreter
+  - [ ] Custom Tools
+  - [ ] Custom Assistants
 
 **Version 0.3.0 - Fissure**
 - [ ] Expanding blocks
   - [ ] Presentation
-  - [ ] Tables / Table Databases
+  - [ ] Tables / Table Databases / Boards
   - [ ] Webpage Embed
   - [ ] Tasks
 - [ ] Note taking features
@@ -115,6 +115,8 @@ cp .env.example .env
 ```
 
 If you want to add additional Python or System packages (apt) for the Code Interpreter modify the respective files in the `codeapi` folder first.
+
+> Note: The install script creates a python env, installs python packages, and builds the codeapi docker image (which can take several minutes)
 
 Run the install script:
 ```bash
