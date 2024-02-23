@@ -14,4 +14,6 @@ RUN pip install --no-cache-dir -r python.txt --break-system-packages
 COPY nodejs.txt ./
 RUN npm install -g $(cat nodejs.txt)
 
-WORKDIR /home/codeapi
+WORKDIR /
+VOLUME ["/runtime", "/scripts"]
+WORKDIR /runtime

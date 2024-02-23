@@ -9,7 +9,7 @@
 
 import docker
 import replicate
-import openai
+from openai import OpenAI
 import litellm
 import pyPDF2
 
@@ -30,8 +30,24 @@ import requests, bs4, os, time, json, urllib.parse, re
 def codeInterpreter(language: str, code: str, chatId: str):
     if language not in ('python', 'nodejs', 'bash'):
         raise ValueError("Language must be either 'python' or 'nodejs' or 'bash'")
-    
-    client = docker.from_env()
+
+    os.makedirs(f"../storage/chats/{chatId}/scripts/", exist_ok=True)
+    os.makedirs(f"../storage/chats/{chatId}/files/", exist_ok=True)
+    fileLocation = os.path.abspath(f"../storage/chats/{chatId}/files/")
+    scriptLocation = os.path.abspath(f"../storage/chats/{chatId}/scripts/")
+
+    dockerCommand = f"docker run -it -v {fileLocation}:/runtime:rw -v {scriptLocation}:/scripts:ro --rm --name codeapi codeapi"
+
+    if language == "python":
+        # Write the code to a file
+        with open(f"../storage/chats/{chatId}/scripts/script.py", "w") as f:
+            f.write(code)
+
+        fullCommand = dockerCommand + f" python3 ../scripts/script.py"
+        output = os.system(fullCommand)
+        
+        return { "output": output }
+
 
 # ----------------------------------------------------
 # Generate Image
@@ -44,6 +60,98 @@ def generateImage(model: str, positivePrompt: str, negativePrompt: str, aspectRa
         raise ValueError("Aspect ratio not supported")
     if quality not in ('normal', 'high'):
         raise ValueError("Quality must be either 'normal' or 'high")
+    
+    if model == "dall-e-3":
+        width = 1024
+        height = 1024
+
+        if aspectRatio == "1:1" or aspectRatio == "4:5" or aspectRatio == "3:4":
+            width = 1024
+            height = 1024
+        elif aspectRatio == "16:9":
+            height = 1024
+            width = 1792
+        elif aspectRatio == "9:16": 
+            height = 1792
+            width = 1024
+
+        quality = "normal" if quality == "normal" else "hd"
+
+        client = OpenAI(api_key=getEnvVar("OPENAI_API_KEY"))
+
+        try:
+            output = client.images.generate(
+                model="dall-e-3",
+                prompt=positivePrompt,
+                size=str(width) + "x" + str(height),
+                quality=quality,
+                n=1
+            )
+
+            imageURL = output.data[0].url
+            body = {
+                "statusCode": 200,
+                "results": imageURL
+            }
+        except:
+            body = {
+                "statusCode": 400,
+                "body": "Error generating image."
+            }
+        
+        return body
+    
+    elif model == "sd-xl" or model == "prometheus" or model == "stable-diffusion":
+        width = 1024
+        height = 1024
+        if aspectRatio == "1:1":
+            width = 1024
+            height = 1024
+        elif aspectRatio == "4:5":
+            width = 1024
+            height = 1280
+        elif aspectRatio == "16:9":
+            width = 1024
+            height = 576
+        elif aspectRatio == "3:4":
+            width = 1024
+            height = 1365
+        elif aspectRatio == "9:16":
+            width = 576
+            height = 1024
+
+        if model == "sd-xl":
+            modelID = "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b"
+        elif model == "prometheus":
+            modelID = "lucataco/proteus-v0.4-lightning:21464a198e9baa3b583f93d8daaaa9e851b91ae1e32accb96ce5081a18a2d87c"
+        elif model == "stable-diffusion":
+            modelID = "stability-ai/stable-diffusion:ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4"
+
+        client = replicate.Client(getEnvVar("REPLICATE_API_KEY"))
+
+        try: 
+            output = client.run(
+                modelID, 
+                input={
+                    "height": height,
+                    "width": width,
+                    "prompt": positivePrompt,
+                    "negative_prompt": negativePrompt,
+                    "disable_safety_checker": True
+                }
+            )
+
+            body = {
+                "statusCode": 200,
+                "results": output
+            }
+        except:
+            body = {
+                "statusCode": 400,
+                "body": "Error generating image."
+            }
+        
+        return body
 
 # ----------------------------------------------------
 # Web Search

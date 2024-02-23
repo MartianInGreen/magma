@@ -25,6 +25,7 @@ cd backend
 
 # Install requirements
 echo "Installing python requirements"
+source bin/activate
 pip install -r requirements.txt 
 if [ $? -ne 0 ]; then
     echo "Error: Failed to install python requirements." >&2
