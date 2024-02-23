@@ -98,7 +98,30 @@ This project is build using Python, you will also need Docker installed on your 
 
 ## Installation
 
-> Coming soon...
+> Currently installation under Windows is not supported, you can use WSL. Not yet deployment ready.
+
+Install [Python 3.12](https://www.python.org/) and [Docker](https://www.docker.com/).
+
+Clone this repository: 
+```bash
+git clone https://github.com/MartianInGreen/magma.git
+cd magma
+```
+
+Copy the `.env.example`file and change what you need to change.
+
+```bash
+cp .env.example .env
+```
+
+If you want to add additional Python or System packages (apt) for the Code Interpreter modify the respective files in the `codeapi` folder first.
+
+Run the install script:
+```bash
+chmod +x tooling/install.sh
+chmod +x tooling/run.sh
+./tooling/install.sh
+```
 
 ## Usage
 
