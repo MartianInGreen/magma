@@ -13,3 +13,6 @@ geopy
 yfinance
 seaborn
 openpyxl
+litellm
+replicate
+openai

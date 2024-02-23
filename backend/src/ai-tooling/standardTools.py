@@ -7,7 +7,6 @@
 # Imports
 # ----------------------------------------------------
 
-import docker
 import replicate
 from openai import OpenAI
 import litellm
@@ -17,7 +16,7 @@ import tinydb
 
 from ..utils import getEnvVar
 
-import requests, bs4, os, time, json, urllib.parse, re, subprocess
+import requests, bs4, os, time, json, urllib.parse, re, subprocess, uuid
 
 ### ----------------------------------------------------
 ### Standard Tools
@@ -30,6 +29,8 @@ import requests, bs4, os, time, json, urllib.parse, re, subprocess
 def codeInterpreter(language: str, code: str, chatId: str):
     if language not in ('python', 'nodejs', 'bash'):
         raise ValueError("Language must be either 'python' or 'nodejs' or 'bash'")
+    
+    runID = str(uuid.uuid4())
 
     os.makedirs(f"../storage/chats/{chatId}/scripts/", exist_ok=True)
     os.makedirs(f"../storage/chats/{chatId}/files/", exist_ok=True)
@@ -40,10 +41,10 @@ def codeInterpreter(language: str, code: str, chatId: str):
 
     if language == "python":
         # Write the code to a file
-        with open(f"../storage/chats/{chatId}/scripts/script.py", "w") as f:
+        with open(f"../storage/chats/{chatId}/scripts/{runID}.py", "w") as f:
             f.write(code)
 
-        fullCommand = dockerCommand + f" python3 ../scripts/script.py"
+        fullCommand = dockerCommand + f" python3 ../scripts/{runID}.py"
         fullCommand = fullCommand.split(" ")
 
         output = subprocess.Popen(fullCommand, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
