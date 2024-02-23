@@ -17,7 +17,7 @@ import tinydb
 
 from ..utils import getEnvVar
 
-import requests, bs4, os, time, json, urllib.parse, re
+import requests, bs4, os, time, json, urllib.parse, re, subprocess
 
 ### ----------------------------------------------------
 ### Standard Tools
@@ -44,9 +44,15 @@ def codeInterpreter(language: str, code: str, chatId: str):
             f.write(code)
 
         fullCommand = dockerCommand + f" python3 ../scripts/script.py"
-        output = os.system(fullCommand)
+        fullCommand = fullCommand.split(" ")
+
+        output = subprocess.Popen(fullCommand, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        stdout, stderr = output.communicate()
+        stdout = stdout.decode("utf-8")
+        stderr = stderr.decode("utf-8")
         
-        return { "output": output }
+        return { "stdout": stdout, "stderr": stderr }
 
 
 # ----------------------------------------------------
