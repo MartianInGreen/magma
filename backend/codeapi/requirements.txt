@@ -1,0 +1,13 @@
+numpy
+scipy
+pypdf2
+pandas
+matplotlib
+pillow
+opencv-python-headless
+requests
+beautifulsoup4
+Pillow
+geopandas
+geopy
+yfinance

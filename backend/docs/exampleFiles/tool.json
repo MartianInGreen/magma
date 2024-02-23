@@ -1,0 +1,13 @@
+{
+    "toolID": "123456789",
+    "tooName": "LLM-Tool-Name",
+    "humanName": "Human Name",
+    "description": "Description of the tool here",
+    "toolParams": {
+        "toolType": ["python", "online"],
+        "code": "Python code here (if tool type is python)",
+        "openapispec": "OpenAPI spec here (if tool type is online)",
+        "customHeaders": {"header1": "custom headers here if tool type is online"},
+        "llmInstructions": "Instructions for the tool here for the LLM here"
+    }
+}

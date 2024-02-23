@@ -1,0 +1,14 @@
+{
+    "assistantID": "123456789",
+    "assistantName": "My Assistant",
+    "description": "This is a assistant. It can help you with a variety of tasks.",
+    "assistantParams": {
+        "assistantModel": "gpt-4-turbo-preview", 
+        "tools": ["tool1_name", "tool2_name", "tool3_name..."],
+        "options": {
+            "includeChatHistory": true, 
+            "includeUserInfo": true,
+            "includeUserInstructions": true
+        }
+    }
+}

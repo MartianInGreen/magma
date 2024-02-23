@@ -1,0 +1,19 @@
+{
+    "chatID": "123346789abcdef",
+    "chatName": "Chat Name",
+    "messages": [
+        {
+            "messageID": "123456789abcdef",
+            "message": "Hello World",
+            "tools": [
+                {
+                    "toolCall": {},
+                    "toolResponse": {}
+                }
+            ],
+            "sender_type": "user/assistant",
+            "senderID": "123456789abcdef",
+            "timestamp": "2019-01-01 00:00:00 UTC"
+        }
+    ]
+}

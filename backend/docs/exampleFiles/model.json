@@ -1,0 +1,12 @@
+{
+    "modelName": "LiteLLModel/Name",
+    "humanName": "Super Duper LLM Model", 
+    "llmParams": {
+        "functionCalling": [true, false],
+        "toolCalling": [true, false],
+        "imageInput": [true, false],
+        "max_tokens": 32000,
+        "max_new_tokens": 32000,
+        "apiKey": "model-provider-api-key"
+    }
+}
