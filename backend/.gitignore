@@ -1,6 +1,6 @@
 ### Other stuff
 storage/chats/*
-
+storage/tools/*
 
 ### Python stuff
 
@@ -34,6 +34,7 @@ MANIFEST
 bin/
 include/
 pyvenv.cfg
+Scripts/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

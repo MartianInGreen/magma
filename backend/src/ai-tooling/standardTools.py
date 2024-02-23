@@ -10,7 +10,6 @@
 import replicate
 from openai import OpenAI
 import litellm
-import pyPDF2
 
 import tinydb 
 
@@ -400,15 +399,15 @@ def readTextFile(file_name: str, chatId: str):
     file_path = f"../storage/chats/{chatId}/files/{file_name}"
 
     try:
-        if file_ending == "pdf":
-            with open(file_path, 'rb') as f:
-                reader = pyPDF2.PdfReader(f)
-                text = ""
-                for page in reader.pages:
-                    text += page.extract_text()
-        else:
-            with open(file_path, 'r') as f:
-                text = f.read()
+        # if file_ending == "pdf":
+        #     with open(file_path, 'rb') as f:
+        #         reader = pyPDF2.PdfReader(f)
+        #         text = ""
+        #         for page in reader.pages:
+        #             text += page.extract_text()
+        #else:
+        with open(file_path, 'r') as f:
+            text = f.read()
     except:
         return {
             'statusCode': 400,

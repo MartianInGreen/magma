@@ -7,7 +7,7 @@ matplotlib
 pillow
 opencv-python-headless
 requests
-beautifulsoup4
+bs4
 geopandas
 geopy
 yfinance
