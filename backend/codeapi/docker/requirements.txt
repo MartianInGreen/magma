@@ -2,12 +2,14 @@ numpy
 scipy
 pypdf2
 pandas
+pyarrow
 matplotlib
 pillow
 opencv-python-headless
 requests
 beautifulsoup4
-Pillow
 geopandas
 geopy
 yfinance
+seaborn
+openpyxl

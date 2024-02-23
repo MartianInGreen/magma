@@ -1,0 +1,1 @@
+wget git curl ffmpeg fish
