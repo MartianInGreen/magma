@@ -2,3 +2,4 @@ openai
 litellm
 replicate
 flask
+docker
