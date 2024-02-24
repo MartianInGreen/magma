@@ -2,6 +2,7 @@ openai
 litellm
 replicate
 flask
+flask-htmx
 docker
 tinydb
 bs4
