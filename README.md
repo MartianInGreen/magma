@@ -35,10 +35,11 @@ As part of that plan we support (custom) Plugins (with many already build in), c
     - [ ] Audio
 - [ ] Basic ai experience
   - [ ] Custom Models
-  - [ ] Integrated Tools
+  - [x] Integrated Tools
   - [ ] Basic Chat Interface
   - [ ] Basic Notes Copilot
-  - [ ] **Code Interpreter**
+  - [x] Code Interpreter
+  - [x] Custom Tools
 
 **Version 0.2.0 - Shield**
 - [ ] Expanding blocks
@@ -57,8 +58,8 @@ As part of that plan we support (custom) Plugins (with many already build in), c
   - [ ] Management Interface
   - [ ] Upgraded Chat
   - [ ] Upgraded Copilot
-  - [ ] Custom Tools
-  - [ ] Custom Assistants
+  - [ ] (Custom) Assistants
+  - [ ] Tools interface
 
 **Version 0.3.0 - Fissure**
 - [ ] Expanding blocks
@@ -100,7 +101,7 @@ This project is build using Python, you will also need Docker installed on your 
 
 > Currently installation under Windows is not supported, you can use WSL. Not yet deployment ready.
 
-Install [Python 3.12](https://www.python.org/) and [Docker](https://www.docker.com/).
+Install [Python 3.11](https://www.python.org/) and [Docker](https://www.docker.com/).
 
 Clone this repository: 
 ```bash
@@ -114,9 +115,10 @@ Copy the `.env.example`file and change what you need to change.
 cp .env.example .env
 ```
 
-If you want to add additional Python or System packages (apt) for the Code Interpreter modify the respective files in the `codeapi` folder first.
+If you want to add additional Python or System packages (apt) for the Code Interpreter modify the respective files in the `codeapi` folder first. Only works when bulding image from source!
 
-> Note: The install script creates a python env, installs python packages, and builds the codeapi docker image (which can take several minutes)
+> Note: The install script creates a python env, installs python packages, and builds (which can take several minutes) or downloads the codeapi docker image 
+> The Docker image is quite large > 2 GB, this is due to the needed Python and NodeJS installation (~850 MB Download)
 
 Run the install script:
 ```bash
