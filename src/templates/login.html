@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magma - Login</title>
     <link rel="icon" href="images/favicon.ico">
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-black h-screen flex items-center justify-center">
     <div class="flex flex-col items-center">
@@ -13,10 +14,10 @@
         <h4 class="text-white text-2xl mt-4">Please login to continue</h4>
 
         <form class="flex flex-col items-center mt-4">
-            <input type="token" placeholder="Login-Token" class="py-2 px-4 rounded mt-4 bg-white">>
+            <input type="token" placeholder="Login-Token" class="input input-borderd py-2 px-4 rounded mt-4">
             <div class="flex mt-4"> 
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Login</button>
-                <button type="button" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="window.location.href = '/sign-up'">Sign Up</button>
+                <button type="submit" class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Login</button>
+                <button type="button" class="btn bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="window.location.href = '/sign-up'">Sign Up</button>
             </div> 
         </form>
     </div>
