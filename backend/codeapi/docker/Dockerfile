@@ -1,5 +1,10 @@
 FROM ubuntu:rolling
 
+LABEL version="1.0"
+LABEL description="Docker image for the codeapi backend. Allowing for the save-ish execution of python and nodejs code."
+LABEL name="codeapi"
+LABEL repository="https://github.com/MartianInGreen/magma"
+
 # Set the working directory
 WORKDIR /codeapi
 
