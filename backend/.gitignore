@@ -1,6 +1,8 @@
 ### Other stuff
 storage/chats/*
 storage/tools/*
+storage/notes/*
+storage/*.json
 
 ### Python stuff
 
