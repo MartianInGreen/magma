@@ -16,3 +16,4 @@ openpyxl
 litellm
 replicate
 openai
+ipython

@@ -31,20 +31,14 @@ def codeInterpreter(language: str, code: str, chatId: str):
     
     runID = str(uuid.uuid4())
 
-    os.makedirs(f"../storage/chats/{chatId}/scripts/", exist_ok=True)
     os.makedirs(f"../storage/chats/{chatId}/files/", exist_ok=True)
     fileLocation = os.path.abspath(f"../storage/chats/{chatId}/files/")
-    scriptLocation = os.path.abspath(f"../storage/chats/{chatId}/scripts/")
 
-    dockerCommand = f"docker run -it -v {fileLocation}:/runtime:rw -v {scriptLocation}:/scripts:ro --rm --name codeapi codeapi"
+    dockerCommand = f"docker run -v {fileLocation}:/runtime:rw --rm --name codeapi codeapi"
 
     if language == "python":
-        # Write the code to a file
-        with open(f"../storage/chats/{chatId}/scripts/{runID}.py", "w") as f:
-            f.write(code)
-
-        fullCommand = dockerCommand + f" python3 ../scripts/{runID}.py"
-        fullCommand = fullCommand.split(" ")
+        fullCommand = dockerCommand.split(" ")
+        fullCommand += ["ipython", "-c", f"{code}"]
 
         output = subprocess.Popen(fullCommand, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
@@ -60,7 +54,7 @@ def codeInterpreter(language: str, code: str, chatId: str):
 # ----------------------------------------------------
 
 def generateImage(model: str, positivePrompt: str, negativePrompt: str, aspectRatio: str, quality: str, chatId: str):
-    if model not in ('dall-e-3', 'sd-xl', 'prometheus', 'stable-diffusion'):
+    if model not in ('dall-e-3', 'sd-xl', 'proteus', 'stable-diffusion'):
         raise ValueError("Model not supported")
     if aspectRatio not in ('1:1', '4:5', '16:9', '3:4', '9:16'):
         raise ValueError("Aspect ratio not supported")
@@ -128,7 +122,7 @@ def generateImage(model: str, positivePrompt: str, negativePrompt: str, aspectRa
 
         if model == "sd-xl":
             modelID = "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b"
-        elif model == "prometheus":
+        elif model == "proteus":
             modelID = "lucataco/proteus-v0.4-lightning:21464a198e9baa3b583f93d8daaaa9e851b91ae1e32accb96ce5081a18a2d87c"
         elif model == "stable-diffusion":
             modelID = "stability-ai/stable-diffusion:ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4"
