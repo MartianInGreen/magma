@@ -14,18 +14,16 @@ fi
 
 # Create venv
 echo "Creating venv"
-cd ..
-python3 -m venv backend
+python3 -m venv src
 if [ $? -ne 0 ]; then
     echo "Error: Failed to create python venv." >&2
     exit 1
 fi
-source backend/bin/activate
-cd backend
 
 # Install requirements
 echo "Installing python requirements"
-source bin/activate
+source src/bin/activate
+echo "Current working directory: $(pwd)"
 pip install -r requirements.txt 
 if [ $? -ne 0 ]; then
     echo "Error: Failed to install python requirements." >&2

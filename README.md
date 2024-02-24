@@ -56,6 +56,7 @@ As part of that plan we support (custom) Plugins (with many already build in), c
   - [ ] Pomodor Timer
 - [ ] AI Expansion
   - [ ] Management Interface
+  - [ ] More build in tools (video generation, audio/speech generation)
   - [ ] Upgraded Chat
   - [ ] Upgraded Copilot
   - [ ] (Custom) Assistants
@@ -75,6 +76,7 @@ As part of that plan we support (custom) Plugins (with many already build in), c
 - [ ] Tools
   - [ ] Audio recorder
   - [ ] Camera
+  - [ ] (AI) Image editor 
 
 **Version 0.4.0 - Dome**
 ...

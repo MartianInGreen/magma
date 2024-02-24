@@ -7,3 +7,4 @@ docker
 tinydb
 bs4
 pyPDF2
+markdown2[all]
