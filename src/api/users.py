@@ -19,14 +19,21 @@ def createUser(userEmail: str, userName: str, userDisplayName: str) -> tuple[boo
     users = db.table("users")
 
     userToken = str(uuid.uuid4().hex)
-    userID = str(uuid.uuid4().hex)
+
+    unique = False
+    while not unique:
+        userID = str(uuid.uuid4().hex)[:8]
+
+        # Check if userID already exists
+        if not users.search(tinydb.Query().userID == userID):
+            unique = True
 
     # First check if user already exists
     if users.search(tinydb.Query().userEmail == userEmail):
         return False, None, None
     else:
         # If it doesn't, create a new entry
-        users.insert({"userID": userID, "userEmail": userEmail, "userName": userName, "userDisplayName": userDisplayName, "userInfo": "", "userInstructions": "", "token": [userToken]})
+        users.insert({"userID": userID, "userEmail": userEmail, "userName": userName, "userDisplayName": userDisplayName, "userInfo": "", "userInstructions": "", "tokens": [userToken]})
         return True, userID, userToken
 
 def getUser(userID: str = None, userEmail: str = None, userName: str = None) -> dict:
@@ -82,7 +89,7 @@ def generateNewToken(userID: str) -> str:
     # First check if user already exists
     if users.search(tinydb.Query().userID == userID):
         # If it does, modify the existing entry
-        users.update(tinydb.operations.add("token", userToken), tinydb.Query().userID == userID)
+        users.update(tinydb.operations.add("tokens", userToken), tinydb.Query().userID == userID)
         return userToken
     else:
         return None
@@ -96,7 +103,7 @@ def resetTokens(userID: str) -> str:
     # First check if user already exists
     if users.search(tinydb.Query().userID == userID):
         # If it does, modify the existing entry
-        users.update(tinydb.operations.set("token", [userToken]), tinydb.Query().userID == userID)
+        users.update(tinydb.operations.set("tokens", [userToken]), tinydb.Query().userID == userID)
         return userToken
     else:
         return None

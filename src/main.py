@@ -8,7 +8,7 @@
 # Imports
 # ------------------------------------------------------
 
-from flask import Flask, render_template, send_file, request
+from flask import Flask, render_template, send_file, request, redirect, url_for
 from flask_htmx import HTMX
 from markupsafe import escape
 
@@ -53,8 +53,9 @@ def login():
             # Check if the email is valid
             if user['userEmail'] != userEmail:
                 return render_template('login.html', error="Invalid email or token")
-            return f"200 {userID}"
+            return redirect(f'/notes/{userID}')
         except Exception as e:
+            print(e)
             return render_template('login.html', error="Invalid email or token")
 
 @app.route('/sign-up', methods=['GET', 'POST'])
@@ -75,7 +76,7 @@ def signUp():
         success, userID, token = createUser(userEmail, userName, userDisplayName)
         # If the user was created, return the user's token
         if success:
-            return f"200 {userID} {token}"
+            return redirect(f'/login?token={token}&email={userEmail}')
         # If the user was not created, return an error
         else:
             return render_template('sign-up.html', error="Error creating user")
