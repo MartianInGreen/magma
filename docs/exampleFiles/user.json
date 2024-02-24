@@ -1,5 +1,6 @@
 {
     "userID": "123456789", 
+    "userEmail": "john@doe.com",
     "userName": "John Doe",
     "userDisplayName": "John Doe",
     "userInfo": "Info for the LLM Model",
