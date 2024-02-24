@@ -60,14 +60,4 @@ else
     echo "Codeapi pulled from dockerhub"
 fi
 
-# Make storage directory and files
-cd ../../
-mkdir storage
-touch storage/assistants.json
-touch storage/models.json
-touch storage/chats.json
-touch storage/notes.json
-touch storage/users.json
-
-
 echo "Backend installed successfully"

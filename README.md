@@ -50,7 +50,6 @@ As part of that plan we support (custom) Plugins (with many already build in), c
   - [ ] Diagrams & Mindmaps
   - [ ] Math
   - [ ] Spreadsheets 
-  - [ ] Canvas
 - [ ] Tools
   - [ ] Calculator
   - [ ] Pomodor Timer
