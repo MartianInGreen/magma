@@ -33,11 +33,11 @@ As part of that plan we support (custom) Plugins (with many already build in), c
   - [ ] Some specialized blocks
     - [ ] Images
     - [ ] Audio
+- [ ] Account creation / login
 - [ ] Basic ai experience
   - [ ] Custom Models
   - [x] Integrated Tools
-  - [ ] Basic Chat Interface
-  - [ ] Basic Notes Copilot
+  - [ ] Basic Interface
   - [x] Code Interpreter
   - [x] Custom Tools
 
@@ -54,12 +54,10 @@ As part of that plan we support (custom) Plugins (with many already build in), c
   - [ ] Calculator
   - [ ] Pomodor Timer
 - [ ] AI Expansion
-  - [ ] Management Interface
+  - [ ] Management Interface (Tools, Assistants, Models)
   - [ ] More build in tools (video generation, audio/speech generation)
-  - [ ] Upgraded Chat
-  - [ ] Upgraded Copilot
+  - [ ] Upgraded Interface
   - [ ] (Custom) Assistants
-  - [ ] Tools interface
 
 **Version 0.3.0 - Fissure**
 - [ ] Expanding blocks
@@ -78,7 +76,10 @@ As part of that plan we support (custom) Plugins (with many already build in), c
   - [ ] (AI) Image editor 
 
 **Version 0.4.0 - Dome**
-...
+- [ ] Actions (Assistant invocations or python code)
+  - [ ] Triggered
+  - [ ] Scheduled 
+- [ ] LLM "Pet" 
 
 **Version 1.0 - Strato**
 ...

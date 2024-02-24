@@ -4,6 +4,8 @@ storage/tools/*
 storage/notes/*
 storage/*.json
 
+test/
+
 ### Python stuff
 
 # Byte-compiled / optimized / DLL files
