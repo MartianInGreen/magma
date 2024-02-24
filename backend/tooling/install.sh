@@ -33,15 +33,43 @@ if [ $? -ne 0 ]; then
 fi
 echo "Requirements installed successfully"
 
-# Make docker image for code api
-cd codeapi/docker
-echo "Building docker image for codeapi/docker"
-docker build -t codeapi .
-if [ $? -ne 0 ]; then
-    echo "Error: Failed to build docker image for codeapi." >&2
-    exit 1
+# Get user input for the codeapi, ask if they want to build or pull from dockerhub
+echo "Do you want to build the codeapi from source or pull from dockerhub?"
+echo "Building from source allows you to install custom python, nodejs & apt packages, modify the files in codeapi/docker for that. Building will take several minutes."
+echo "Pulling from dockerhub will pull the latest image from dockerhub."
+echo "1. Build from source"
+echo "2. Pull from dockerhub"
+read -p "Enter your choice: " choice
+
+if [ $choice -eq 1 ]; then
+    # Make docker image for code api
+    cd codeapi/docker
+    echo "Building docker image for codeapi/docker"
+    docker build -t codeapi .
+    if [ $? -ne 0 ]; then
+        echo "Error: Failed to build docker image for codeapi." >&2
+        exit 1
+    fi
+    echo "Docker image for codeapi built."
+else
+    echo "Pulling codeapi from dockerhub"
+    docker pull martianhannah/codeapi
+    docker tag martianhannah/codeapi codeapi
+    if [ $? -ne 0 ]; then
+        echo "Error: Failed to pull codeapi from dockerhub." >&2
+        exit 1
+    fi
+    echo "Codeapi pulled from dockerhub"
 fi
-echo "Docker image for codeapi built."
+
+# Make storage directory and files
+cd ../../
+mkdir storage
+touch storage/assistants.json
+touch storage/models.json
+touch storage/chats.json
+touch storage/notes.json
+touch storage/users.json
 
 
 echo "Backend installed successfully"

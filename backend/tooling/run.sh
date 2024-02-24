@@ -2,4 +2,5 @@
 
 # Run backend
 source bin/activate
-python src/main.py
+cd src
+python main.py
