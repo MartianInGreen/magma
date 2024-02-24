@@ -41,15 +41,22 @@ def login():
     # If method is POST, check the login credentials
     elif request.method == 'POST':
         tokenInput = request.form['token']
+        userEmail = request.form['email']
+        # Check if one of the fields is empty
+        if tokenInput == "" or userEmail == "":
+            return render_template('login.html', error="Please fill out all fields")
+
         # Check if the token is valid
         try:
             user = getUserByToken(tokenInput)
             print(user)
             userID = user['userID']
+            # Check if the email is valid
+            if user['userEmail'] != userEmail:
+                return render_template('login.html', error="Invalid email or token")
             return f"200 {userID}"
         except Exception as e:
-            print(e)
-            return "401"
+            return render_template('login.html', error="Invalid email or token")
 
 @app.route('/sign-up', methods=['GET', 'POST'])
 def signUp():
@@ -61,6 +68,10 @@ def signUp():
         userEmail = request.form['email']
         userName = request.form['name']
         userDisplayName = request.form['displayName']
+        # Check if one of the fields is empty
+        if userEmail == "" or userName == "" or userDisplayName == "":
+            return render_template('sign-up.html', error="Please fill out all fields")
+
         # Create the user
         success, userID, token = createUser(userEmail, userName, userDisplayName)
         # If the user was created, return the user's token
@@ -68,8 +79,7 @@ def signUp():
             return f"200 {userID} {token}"
         # If the user was not created, return an error
         else:
-            return "401"
-    return render_template('sign-up.html')
+            return render_template('sign-up.html', error="Error creating user")
 
 @app.route('/notes/<userid>')
 def notes(userid):

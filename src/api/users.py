@@ -14,7 +14,7 @@ import uuid
 # User Management
 # ----------------------------------------------------
 
-def createUser(userEmail: str, userName: str, userDisplayName: str):
+def createUser(userEmail: str, userName: str, userDisplayName: str) -> tuple[bool, str, str]:
     db = tinydb.TinyDB("../storage/users.json")
     users = db.table("users")
 
@@ -29,7 +29,7 @@ def createUser(userEmail: str, userName: str, userDisplayName: str):
         users.insert({"userID": userID, "userEmail": userEmail, "userName": userName, "userDisplayName": userDisplayName, "userInfo": "", "userInstructions": "", "token": [userToken]})
         return True, userID, userToken
 
-def getUser(userID: str = None, userEmail: str = None, userName: str = None):
+def getUser(userID: str = None, userEmail: str = None, userName: str = None) -> dict:
     db = tinydb.TinyDB("../storage/users.json")
     users = db.table("users")
 
@@ -42,7 +42,7 @@ def getUser(userID: str = None, userEmail: str = None, userName: str = None):
     else:
         return None
 
-def updateUser(userID: str, userEmail: str = None, userName: str = None, userDisplayName: str = None, userInfo: str = None, userInstructions: str = None):
+def updateUser(userID: str, userEmail: str = None, userName: str = None, userDisplayName: str = None, userInfo: str = None, userInstructions: str = None) -> bool:
     db = tinydb.TinyDB("../storage/users.json")
     users = db.table("users")
 
@@ -64,7 +64,7 @@ def updateUser(userID: str, userEmail: str = None, userName: str = None, userDis
     else:
         return False
 
-def getUserByToken(token: str):
+def getUserByToken(token: str) -> dict:
     db = tinydb.TinyDB("../storage/users.json")
     users = db.table("users")
 
@@ -83,6 +83,20 @@ def generateNewToken(userID: str) -> str:
     if users.search(tinydb.Query().userID == userID):
         # If it does, modify the existing entry
         users.update(tinydb.operations.add("token", userToken), tinydb.Query().userID == userID)
+        return userToken
+    else:
+        return None
+    
+def resetTokens(userID: str) -> str:
+    db = tinydb.TinyDB("../storage/users.json")
+    users = db.table("users")
+
+    userToken = str(uuid.uuid4().hex)
+
+    # First check if user already exists
+    if users.search(tinydb.Query().userID == userID):
+        # If it does, modify the existing entry
+        users.update(tinydb.operations.set("token", [userToken]), tinydb.Query().userID == userID)
         return userToken
     else:
         return None
