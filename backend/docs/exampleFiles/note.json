@@ -1,0 +1,13 @@
+{
+    "nodeID": "12940127417",
+    "nodeName": "Note 1",
+    "parentID": "071421071",
+    "children": ["1", "2", "..."],
+    "metadata": {
+        "created": "YYYY-MM-DD HH:MM:SS UTC", 
+        "modified": "YYYY-MM-DD HH:MM:SS UTC",
+        "creator": "user1_id",
+        "tags": ["tag1", "tag2", "..."]
+    },
+    "blocks": {}
+}
