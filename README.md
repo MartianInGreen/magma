@@ -73,7 +73,7 @@ As part of that plan we support (custom) Plugins (with many already build in), c
   - [ ] Daily Notes
 - [ ] Tools
   - [ ] Audio recorder
-  - [ ] Camera
+  - [ ] Camera / Scanner
   - [ ] (AI) Image editor 
 
 **Version 0.4.0 - Dome**
@@ -81,6 +81,8 @@ As part of that plan we support (custom) Plugins (with many already build in), c
   - [ ] Triggered
   - [ ] Scheduled 
 - [ ] LLM "Pet" 
+- [ ] Import (from Markdown, JSON, HTML) / Export (Markdown, JSON, HTML, PDF)
+- [ ] Persistant Code execution / Notebooks
 
 **Version 1.0 - Strato**
 ...
@@ -112,7 +114,7 @@ git clone https://github.com/MartianInGreen/magma.git
 cd magma
 ```
 
-Copy the `.env.example`file and change what you need to change.
+Copy the `.env.example` file and change what you need to change.
 
 ```bash
 cp .env.example .env

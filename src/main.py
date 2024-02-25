@@ -15,6 +15,8 @@ from markupsafe import escape
 import os
 
 from api.users import createUser, getUser, updateUser, getUserByToken
+from aiTooling.assistants import getAssistant, callAssistant, listAssistants, updateAssistant, deleteAssistant
+from aiTooling.llm import getLLM, deleteLLM, listLLMs, updateLLM
 
 # ------------------------------------------------------
 # Constants
