@@ -33,7 +33,7 @@ As part of that plan we support (custom) Plugins (with many already build in), c
   - [ ] Some specialized blocks
     - [ ] Images
     - [ ] Audio
-- [ ] Account creation / login
+- [x] Basic account creation / login
 - [ ] Basic ai experience
   - [ ] Custom Models
   - [x] Integrated Tools
@@ -42,6 +42,7 @@ As part of that plan we support (custom) Plugins (with many already build in), c
   - [x] Custom Tools
 
 **Version 0.2.0 - Shield**
+- [ ] Account protected Notes 
 - [ ] Expanding blocks
   - [ ] Video
   - [ ] PDFs
@@ -119,8 +120,9 @@ cp .env.example .env
 
 If you want to add additional Python or System packages (apt) for the Code Interpreter modify the respective files in the `codeapi` folder first. Only works when bulding image from source!
 
-> Note: The install script creates a python env, installs python packages, and builds (which can take several minutes) or downloads the codeapi docker image 
-> The Docker image is quite large > 2 GB, this is due to the needed Python and NodeJS installation (~850 MB Download)
+> Note: The install script creates a python env, installs python packages, and builds (which can take several minutes) or downloads the codeapi docker image.
+
+> The Docker image is quite large > 2 GB, this is due to the needed Python and NodeJS installation (~850 MB Download from dockerhub).
 
 Run the install script:
 ```bash
