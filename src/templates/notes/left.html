@@ -1,0 +1,25 @@
+<div class="flex flex-col justify-between h-full">
+    <div name="left-top" class="w-full flex justify-start flex-grow">
+        <!-- Content here -->
+    </div>
+    <div class="flex flex-row items-center justify-center">
+        <button class="btn btn-ghost no-animation ml-2 mb-2 mr-2 w-[95%]" onclick="window.location.href = '/settings/{{ userId }}'">
+            <div class="avatar h-full" id="avatar">
+                {% if avatarIcon %}
+                    <img src="{{ avatarIcon }}" alt="Avatar" class="rounded-full w-full h-full object-cover">
+                {% else %}
+                    <img src="/images/avatar_small.png" alt="Avatar" class="rounded-full w-full h-full object-cover">    
+                {% endif %}
+            </div>
+            <p class="font-bold text-white flex-grow truncate" id="userName">{{ userName }}</p>
+        </button>
+    </div>
+</div>
+
+<script>
+window.onload = function() {
+    var avatarWidth = document.getElementById('avatar').offsetWidth;
+    var userNameElement = document.getElementById('userName');
+    userNameElement.style.maxWidth = `calc(100% - ${avatarWidth}px - 1rem)`;
+};
+</script>

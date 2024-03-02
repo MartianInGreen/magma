@@ -133,8 +133,19 @@ def notes(userid):
             return render_template('login.html', error="Invalid email or token", title="Login")
     except Exception as e:
         return render_template('login.html', error="Invalid email or token", title="Login")
+    
+    params = {'title': "Notes", 'userName': user['userName'], 'userId': user['userID']}
 
-    return render_template('notes.html', title="Notes")
+    # Check if the user has an icon
+    try:
+        userIcon = user['icon']
+        params['avatarIcon'] = userIcon
+    except Exception as e:
+        pass
+
+    print(params)
+
+    return render_template('notes.html', **params)
 
 @app.route('/notes/<userid>/<noteid>')
 def note(userid, noteid):
