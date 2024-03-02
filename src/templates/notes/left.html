@@ -3,7 +3,7 @@
         <!-- Content here -->
     </div>
     <div class="flex flex-row items-center justify-center">
-        <button class="btn btn-ghost no-animation ml-2 mb-2 mr-2 w-[95%]" onclick="window.location.href = '/settings/{{ userId }}'">
+        <button hx-get="/views/settings" hx-target="#centerView" class="btn btn-ghost no-animation ml-2 mb-2 mr-2 w-[95%]">
             <div class="avatar h-full" id="avatar">
                 {% if avatarIcon %}
                     <img src="{{ avatarIcon }}" alt="Avatar" class="rounded-full w-full h-full object-cover">
@@ -11,7 +11,7 @@
                     <img src="/images/avatar_small.png" alt="Avatar" class="rounded-full w-full h-full object-cover">    
                 {% endif %}
             </div>
-            <p class="font-bold text-white flex-grow truncate" id="userName">{{ userName }}</p>
+            <p class="font-bold text-white flex-grow truncate" id="userName">{{ displayName }}</p>
         </button>
     </div>
 </div>
