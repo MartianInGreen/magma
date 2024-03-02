@@ -119,6 +119,24 @@ def signUp():
         else:
             return render_template('sign-up.html', error="Error creating user", title="Sign Up")
 
+@app.route('/notes')
+def notesRedirect():
+    # Get cookies from request
+    tokenInput = request.cookies.get('token')
+    userEmail = request.cookies.get('email')
+
+    try:
+        # Check if the token is valid
+        user = getUserByToken(tokenInput)
+        userID = user['userID']
+        # Check if the email is valid
+        if user['userEmail'] != userEmail:
+            return render_template('login.html', error="Invalid email or token", title="Login")
+    except Exception as e:
+        return render_template('login.html', error="Invalid email or token", title="Login")
+
+    return redirect(f'/notes/{userID}')
+
 @app.route('/notes/<userid>')
 def notes(userid):
     # Get cookies from request
@@ -134,7 +152,7 @@ def notes(userid):
     except Exception as e:
         return render_template('login.html', error="Invalid email or token", title="Login")
     
-    params = {'title': "Notes", 'userName': user['userName'], 'userId': user['userID']}
+    params = {'title': "Notes", 'userName': user['userName'], 'displayName': user['userDisplayName'],'userId': user['userID']}
 
     # Check if the user has an icon
     try:
@@ -147,8 +165,8 @@ def notes(userid):
 
     return render_template('notes.html', **params)
 
-@app.route('/notes/<userid>/<noteid>')
-def note(userid, noteid):
+@app.route('/settings')
+def settingsRedirect():
     # Get cookies from request
     tokenInput = request.cookies.get('token')
     userEmail = request.cookies.get('email')
@@ -163,7 +181,7 @@ def note(userid, noteid):
     except Exception as e:
         return render_template('login.html', error="Invalid email or token", title="Login")
 
-    return render_template('notes.html', title="Note: " + noteid)
+    return redirect(f'/settings/{userID}')
 
 @app.route('/settings/<userid>')
 def settings(userid):
@@ -182,6 +200,31 @@ def settings(userid):
         return render_template('login.html', error="Invalid email or token", title="Login")
 
     return render_template('settings.html', title="Settings")
+
+# ------------------------------------------------------
+# Views
+# ------------------------------------------------------
+
+@app.route('/views/search')
+def viewSettings():
+    if htmx:
+        return render_template('views/search.html')
+    else: 
+        return "401"
+    
+@app.route('/views/notes')
+def viewNotes():
+    if htmx:
+        return render_template('views/note.html')
+    else: 
+        return "401"
+    
+@app.route('/views/settings')
+def viewSearch():
+    if htmx:
+        return render_template('views/settings.html')
+    else: 
+        return "401"
 
 # ------------------------------------------------------
 # Main - API
