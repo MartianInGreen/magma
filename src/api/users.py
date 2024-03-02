@@ -9,6 +9,7 @@
 
 import tinydb
 import uuid
+import secrets
 
 # ----------------------------------------------------
 # User Management
@@ -18,7 +19,7 @@ def createUser(userEmail: str, userName: str, userDisplayName: str) -> tuple[boo
     db = tinydb.TinyDB("../storage/users.json")
     users = db.table("users")
 
-    userToken = str(uuid.uuid4().hex)
+    userToken = secrets.token_urlsafe(32)
 
     unique = False
     while not unique:
@@ -75,7 +76,7 @@ def getUserByToken(token: str) -> dict:
     db = tinydb.TinyDB("../storage/users.json")
     users = db.table("users")
 
-    # Tokens looks something like this: "tokens": ["7fc7256e795a456d917465c837ecd588"]
+    # Tokens looks something like this: "tokens": ["VN2npha-Zueb3MrKLV3u2gs74eEBD_No8O0sD78CbZU"]
     for user in users.all():
         if token in user['tokens']:
             return user
@@ -84,7 +85,7 @@ def generateNewToken(userID: str) -> str:
     db = tinydb.TinyDB("../storage/users.json")
     users = db.table("users")
 
-    userToken = str(uuid.uuid4().hex)
+    userToken = secrets.token_urlsafe(32)
 
     # First check if user already exists
     if users.search(tinydb.Query().userID == userID):
@@ -98,7 +99,7 @@ def resetTokens(userID: str) -> str:
     db = tinydb.TinyDB("../storage/users.json")
     users = db.table("users")
 
-    userToken = str(uuid.uuid4().hex)
+    userToken = secrets.token_urlsafe(32)
 
     # First check if user already exists
     if users.search(tinydb.Query().userID == userID):
