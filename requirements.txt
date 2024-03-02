@@ -8,3 +8,4 @@ tinydb
 bs4
 pyPDF2
 mistune
+tavily-python
