@@ -10,10 +10,14 @@
 import replicate
 from openai import OpenAI
 import litellm
+from tavily import TavilyClient
 
 import tinydb 
 
-from ..utils import getEnvVar
+try: 
+    from ..utils import getEnvVar
+except:
+    from utils import getEnvVar
 
 import requests, bs4, os, time, json, urllib.parse, re, subprocess, uuid
 
@@ -47,14 +51,16 @@ def codeInterpreter(language: str, code: str, chatId: str):
         stderr = stderr.decode("utf-8")
         
         return { "stdout": stdout, "stderr": stderr }
+    else: 
+        return { "result": "Language not supported" }
 
 
 # ----------------------------------------------------
 # Generate Image
 # ----------------------------------------------------
 
-def generateImage(model: str, positivePrompt: str, negativePrompt: str, aspectRatio: str, quality: str, chatId: str):
-    if model not in ('dall-e-3', 'sd-xl', 'proteus', 'stable-diffusion'):
+def generateImage(model: str, positivePrompt: str, negativePrompt: str, aspectRatio: str, quality: str, chatId: str = None):
+    if model not in ('dall-e-3', 'sd-xl', 'proteus', 'stable-diffusion', 'playground-v2.5'):
         raise ValueError("Model not supported")
     if aspectRatio not in ('1:1', '4:5', '16:9', '3:4', '9:16'):
         raise ValueError("Aspect ratio not supported")
@@ -121,11 +127,16 @@ def generateImage(model: str, positivePrompt: str, negativePrompt: str, aspectRa
             height = 1024
 
         if model == "sd-xl":
-            modelID = "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b"
+            if quality == "hd":
+                modelID = "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b"
+            else:
+                modelID = "lucataco/sdxl-lightning-4step:727e49a643e999d602a896c774a0658ffefea21465756a6ce24b7ea4165eba6a"
         elif model == "proteus":
             modelID = "lucataco/proteus-v0.4-lightning:21464a198e9baa3b583f93d8daaaa9e851b91ae1e32accb96ce5081a18a2d87c"
         elif model == "stable-diffusion":
             modelID = "stability-ai/stable-diffusion:ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4"
+        elif model == "playground-v2.5":
+            modelID = "lucataco/playground-v2.5-1024px-aesthetic:419269784d9e00c56e5b09747cfc059a421e0c044d5472109e129b746508c365"
 
         client = replicate.Client(getEnvVar("REPLICATE_API_KEY"))
 
@@ -162,7 +173,7 @@ def remove_html_tags(text):
         clean = re.compile('<.*?>')
         return re.sub(clean, '', text)
 
-def webSearch(query: str, type: str, focus: str, freshness: str, country: str, chatId: str):
+def searchWithBrave(query: str, type: str, focus: str, freshness: str, country: str, chatId: str = None, customGoggles: str = None):
     if type not in ('quick', 'deep', 'research'):
         raise ValueError("Type must be either 'quick' or 'deep' or 'research'")
     if focus not in ('all', 'web', 'news', 'reddit', 'academia', 'video'):
@@ -189,6 +200,10 @@ def webSearch(query: str, type: str, focus: str, freshness: str, country: str, c
             goggles_id = "&goggles_id=https://raw.githubusercontent.com/mrmathew/brave-search-goggle/main/reddit-search"
         elif focus == "academia":
             goggles_id = "&goggles_id=https://raw.githubusercontent.com/solso/goggles/main/academic_papers_search.goggle"
+
+        # Handle custom goggles
+        if customGoggles:
+            goggles_id = "&goggles_id=" + customGoggles
 
         freshness = ""
         # Handle Freshness
@@ -261,7 +276,22 @@ def webSearch(query: str, type: str, focus: str, freshness: str, country: str, c
             'body': json.dumps('Error fetching search results.')
         }
 
-def webScrape(url: str, type: str, modelName: str, chatId: str):
+def searchWithTravily(query: str, search_depth: str = "advanced", chatId: str = None) -> dict:
+    travily = TavilyClient(getEnvVar("TRAVILY_API_KEY")) 
+
+    if search_depth != "advanced" and search_depth != "basic":
+        raise ValueError("Search depth must be either 'advanced' or 'basic'")
+    
+    response = travily.search(query, search_depth)
+
+    context = [{"url": obj["url"], "content": obj["content"]} for obj in response.results]
+
+    return {
+        "statusCode": 200,
+        "results": context
+    }
+
+def webScrape(url: str, type: str, modelName: str, chatId: str = None):
     if type not in ('full', 'summary'):
         raise ValueError("Type must be either 'quick' or 'deep' or 'research'")
     
@@ -358,8 +388,9 @@ def webScrape(url: str, type: str, modelName: str, chatId: str):
 # Wolfram|Alpha
 # ----------------------------------------------------
     
-def wolframAlpha(query: str, chatId: str):
-    baseURL = f"http://api.wolframalpha.com/v2/query?appid={getEnvVar('WOLFRAM_APP_ID')}&output=json&input="
+def wolframAlpha(query: str, chatId: str = None):
+    # baseURL = f"http://api.wolframalpha.com/v2/query?appid={getEnvVar('WOLFRAM_APP_ID')}&output=json&input="
+    baseURL = f"https://www.wolframalpha.com/api/v1/llm-api?appid={getEnvVar('WOLFRAM_APP_ID')}&input="
 
     # Encode the query
     encoded_query = urllib.parse.quote(query)
@@ -367,8 +398,11 @@ def wolframAlpha(query: str, chatId: str):
 
     try:
         response = requests.get(url)
-        data = response.json()
-    except:
+        print(response)
+        data = response.text
+        print(str(data))
+    except Exception as e:
+        print(e)
         return {
             'statusCode': 400,
             'body': json.dumps('Error fetching Wolfram|Alpha results.')
@@ -376,7 +410,7 @@ def wolframAlpha(query: str, chatId: str):
     
     return {
         'statusCode': 200,
-        'results': data
+        'results': json.dumps(data)
     }
 
 # ----------------------------------------------------
@@ -412,3 +446,6 @@ def readTextFile(file_name: str, chatId: str):
 
 def askPDF(file_name: str, query: str, chatId: str):
     pass
+
+if __name__ == "__main__":
+    print(wolframAlpha("What is the capital of France?"))
