@@ -27,6 +27,10 @@ As part of that plan we support (custom) Plugins (with many already build in), c
 ## Roadmap
 
 **Version 0.1.0 - Cinder**
+- [ ] Basic UI 
+  - [x] Login & Sign-Up
+  - [ ] Settings
+  - [ ] Notes
 - [ ] Basic note-taking experience
   - [ ] Markdown input & rendering
   - [ ] Text editor
@@ -42,6 +46,9 @@ As part of that plan we support (custom) Plugins (with many already build in), c
   - [x] Custom Tools
 
 **Version 0.2.0 - Shield**
+- [ ] Expanded UI
+  - [ ] Search (Local & Web)
+  - [ ] Chat
 - [ ] Account protected Notes 
 - [ ] Expanding blocks
   - [ ] Video
@@ -69,7 +76,7 @@ As part of that plan we support (custom) Plugins (with many already build in), c
 - [ ] Note taking features
   - [ ] Tags
   - [ ] Task Overview
-  - [ ] Calendar
+  - [ ] Calendar (& Calendar UI)
   - [ ] Daily Notes
 - [ ] Tools
   - [ ] Audio recorder
