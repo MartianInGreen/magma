@@ -63,8 +63,10 @@ As part of that plan we support (custom) Plugins (with many already build in), c
   - [ ] Pomodor Timer
 - [ ] AI Expansion
   - [ ] Management Interface (Tools, Assistants, Models)
-  - [ ] More build in tools (video generation, audio/speech generation)
+  - [ ] More build in tools (video generation, audio/speech generation, Text Inpaint)
   - [ ] Upgraded Interface
+    - [ ] Canvas
+    - [ ] Blocks Display / UI Elements by Agent
   - [ ] (Custom) Assistants
 
 **Version 0.3.0 - Fissure**
@@ -81,7 +83,7 @@ As part of that plan we support (custom) Plugins (with many already build in), c
 - [ ] Tools
   - [ ] Audio recorder
   - [ ] Camera / Scanner
-  - [ ] (AI) Image editor 
+  - [ ] (AI) Image editor (Remove & Replace Background, Inpaint/Cleanup, Upscale, Uncrop, Reimagine)
 
 **Version 0.4.0 - Dome**
 - [ ] Actions (Assistant invocations or python code)

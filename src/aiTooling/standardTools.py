@@ -385,6 +385,19 @@ def webScrape(url: str, type: str, modelName: str, chatId: str = None):
         return response
 
 # ----------------------------------------------------
+# Note Taking
+# ----------------------------------------------------
+    
+def searchNotes(userID: str, query: str, chatId: str = None):
+    pass
+
+def createNote(userID: str, title: str, content: dict, chatId: str = None):
+    pass 
+
+def updateNote(userID: str, noteID: str, content: dict, updateMethod: str, title: str = None, chatId: str = None):
+    pass
+
+# ----------------------------------------------------
 # Wolfram|Alpha
 # ----------------------------------------------------
     

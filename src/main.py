@@ -131,9 +131,9 @@ def notesRedirect():
         userID = user['userID']
         # Check if the email is valid
         if user['userEmail'] != userEmail:
-            return render_template('login.html', error="Invalid email or token", title="Login")
+            return redirect('/login')
     except Exception as e:
-        return render_template('login.html', error="Invalid email or token", title="Login")
+        return redirect('/login')
 
     return redirect(f'/notes/{userID}')
 
@@ -148,9 +148,9 @@ def notes(userid):
         user = getUserByToken(tokenInput)
         # Check if the email is valid
         if user['userEmail'] != userEmail:
-            return render_template('login.html', error="Invalid email or token", title="Login")
+            return redirect('/login')
     except Exception as e:
-        return render_template('login.html', error="Invalid email or token", title="Login")
+        return redirect('/login')
     
     params = {'title': "Notes", 'userName': user['userName'], 'displayName': user['userDisplayName'],'userId': user['userID']}
 
@@ -164,42 +164,6 @@ def notes(userid):
     print(params)
 
     return render_template('notes.html', **params)
-
-@app.route('/settings')
-def settingsRedirect():
-    # Get cookies from request
-    tokenInput = request.cookies.get('token')
-    userEmail = request.cookies.get('email')
-
-    try:
-        # Check if the token is valid
-        user = getUserByToken(tokenInput)
-        userID = user['userID']
-        # Check if the email is valid
-        if user['userEmail'] != userEmail:
-            return render_template('login.html', error="Invalid email or token", title="Login")
-    except Exception as e:
-        return render_template('login.html', error="Invalid email or token", title="Login")
-
-    return redirect(f'/settings/{userID}')
-
-@app.route('/settings/<userid>')
-def settings(userid):
-    # Get cookies from request
-    tokenInput = request.cookies.get('token')
-    userEmail = request.cookies.get('email')
-
-    try:
-        # Check if the token is valid
-        user = getUserByToken(tokenInput)
-        userID = user['userID']
-        # Check if the email is valid
-        if user['userEmail'] != userEmail:
-            return render_template('login.html', error="Invalid email or token", title="Login")
-    except Exception as e:
-        return render_template('login.html', error="Invalid email or token", title="Login")
-
-    return render_template('settings.html', title="Settings")
 
 # ------------------------------------------------------
 # Views
@@ -223,6 +187,13 @@ def viewNotes():
 def viewSearch():
     if htmx:
         return render_template('views/settings.html')
+    else: 
+        return "401"
+
+@app.route('/views/chat')
+def viewChat():
+    if htmx:
+        return render_template('views/chat.html')
     else: 
         return "401"
 

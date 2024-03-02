@@ -10,6 +10,8 @@
             <li><a>Appearance</a></li>
             <li><a>Account</a></li>
             <li><a>Plugins</a></li>
+            <div class="divider"></div>
+            <li onclick="clearCookies()"><a>Logout</a></li>
         </ul>
         <div class="divider divider-horizontal"></div>
         <div id="settingsView" class="bg-base-200 w-[80%] h-full overflow-auto">
@@ -17,3 +19,11 @@
         </div>    
     </div>
 </div>
+
+<script>
+function clearCookies() {
+    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'email=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    window.location.href = '/login';
+}
+</script>
