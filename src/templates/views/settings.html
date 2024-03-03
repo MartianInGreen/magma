@@ -3,13 +3,13 @@
     <div class="w-[80%] flex flex-row justify-center items-center mx-auto h-full">
         <ul class="menu bg-base-200 w-[20%] rounded-box h-full overflow-auto">
             <p class="text-1xl font-bold mb-2">Options</p>
-            <li><a>General</a></li>
-            <li><a>Editor</a></li>
-            <li><a>AI</a></li>
-            <li><a>Files and links</a></li>
-            <li><a>Appearance</a></li>
-            <li><a>Account</a></li>
-            <li><a>Plugins</a></li>
+            <li hx-get="/settings/general" hx-target="#settingsView"><a>General</a></li>
+            <li hx-get="/settings/editor" hx-target="#settingsView"><a>Editor</a></li>
+            <li hx-get="/settings/ai" hx-target="#settingsView"><a>AI</a></li>
+            <li hx-get="/settings/files-and-links" hx-target="#settingsView"><a>Files and links</a></li>
+            <li hx-get="/settings/appearance" hx-target="#settingsView"><a>Appearance</a></li>
+            <li hx-get="/settings/account" hx-target="#settingsView"><a>Account</a></li>
+            <li hx-get="/settings/plugins" hx-target="#settingsView"><a>Plugins</a></li>
             <div class="divider"></div>
             <li onclick="clearCookies()"><a>Logout</a></li>
         </ul>

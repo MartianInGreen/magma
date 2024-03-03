@@ -50,7 +50,7 @@ def getUser(userID: str = None, userEmail: str = None, userName: str = None) -> 
     else:
         return None
 
-def updateUser(userID: str, userEmail: str = None, userName: str = None, userDisplayName: str = None, userInfo: str = None, userInstructions: str = None) -> bool:
+def updateUser(userID: str, userEmail: str = None, userName: str = None, userDisplayName: str = None, userInfo: str = None, userInstructions: str = None, userIcon: str = None) -> bool:
     db = tinydb.TinyDB("../storage/users.json")
     users = db.table("users")
 
@@ -67,6 +67,8 @@ def updateUser(userID: str, userEmail: str = None, userName: str = None, userDis
             users.update({"userInfo": userInfo}, tinydb.Query().userID == userID)
         if userInstructions != None:
             users.update({"userInstructions": userInstructions}, tinydb.Query().userID == userID)
+        if userIcon != None:
+            users.update({"userIcon": userIcon}, tinydb.Query().userID == userID)
 
         return True
     else:

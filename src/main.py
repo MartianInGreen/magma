@@ -8,11 +8,12 @@
 # Imports
 # ------------------------------------------------------
 
-from flask import Flask, render_template, send_file, request, redirect, url_for, make_response
+from flask import Flask, render_template, send_file, request, redirect, url_for, make_response, send_from_directory
 from flask_htmx import HTMX
 from markupsafe import escape
+from PIL import Image
 
-import os
+import os, re
 
 from api.users import createUser, getUser, updateUser, getUserByToken
 from aiTooling.assistants import getAssistant, callAssistant, listAssistants, updateAssistant, deleteAssistant
@@ -157,7 +158,7 @@ def notes(userid):
 
     # Check if the user has an icon
     try:
-        userIcon = user['icon']
+        userIcon = user['userIcon']
         params['avatarIcon'] = userIcon
     except Exception as e:
         pass
@@ -170,54 +171,213 @@ def notes(userid):
 # Views
 # ------------------------------------------------------
 
-@app.route('/views/search')
-def viewSettings():
+@app.route('/views/<view>')
+def views(view):
     if htmx:
-        return render_template('views/search.html')
+        try:
+            return render_template(f'views/{escape(view)}.html')
+        except Exception as e:
+            print("Template not found")
+            return "401"
     else: 
         return "401"
-    
-@app.route('/views/notes')
-def viewNotes():
+        
+@app.route('/settings/<part>')
+def settings(part):
     if htmx:
-        return render_template('views/note.html')
-    else: 
-        return "401"
-    
-@app.route('/views/settings')
-def viewSearch():
-    if htmx:
-        return render_template('views/settings.html')
-    else: 
-        return "401"
+        try:
+            params = {}
 
-@app.route('/views/chat')
-def viewChat():
-    if htmx:
-        return render_template('views/chat.html')
+            if part == "account": 
+                try: 
+                    # Get cookies from request
+                    tokenInput = request.cookies.get('token')
+                    userEmail = request.cookies.get('email')
+
+                    # Check if the token is valid
+                    user = getUserByToken(tokenInput)
+                    # Check if the email is valid
+                    if user['userEmail'] != userEmail:
+                        return redirect('/login')
+
+                    # Get the user's information
+                    params['userName'] = user['userName']
+                    params['userDisplayName'] = user['userDisplayName']
+                    params['userEmail'] = user['userEmail']
+                    params['userId'] = user['userID']
+                    params['avatarIcon'] = user['userIcon']
+                except Exception as e:
+                    return redirect('/login')
+
+            return render_template(f'settings/{escape(part)}.html', **params)
+        except Exception as e:
+            print("Template not found")
+            return "Setting not found"
     else: 
         return "401"
 
 # ------------------------------------------------------
-# Main - API
+# Main - API - Files
 # ------------------------------------------------------
 
 @app.route('/images/<filename>')
 def images(filename):
     try: 
-        file = os.path.abspath(f'../storage/static/images/{escape(filename)}')
+        directory = os.path.abspath(f'../storage/static/images/')
+        filename = escape(filename)
         
         # file type 
         file_type = filename.split(".")[::-1][0]
 
-        return send_file(file, mimetype=f'image/{file_type}')
+        response = send_from_directory(directory, filename)
+        response.headers['Cache-Control'] = 'public, max-age=86400'
+        
+        # Set the mimetype
+        response.mimetype = f"image/{file_type}"
+
+        return response
+    except Exception as e:
+        print(e)
+        return "401", 401
+    
+@app.route('/css/<filename>')
+def css(filename):
+    try: 
+        directory = os.path.abspath('../storage/static/css/')
+        filename = escape(filename)
+        response = send_from_directory(directory, filename)
+        response.headers['Cache-Control'] = 'public, max-age=86400'
+        return response
     except Exception as e:
         print(e)
         return "401"
     
-@app.route('/api/assistants', methods=['GET', 'POST'])
-def assistants():
-    pass 
+@app.route('/js/<filename>')
+def js(filename):
+    try: 
+        directory = os.path.abspath('../storage/static/js/')
+        filename = escape(filename)
+        response = send_from_directory(directory, filename)
+        response.headers['Cache-Control'] = 'public, max-age=86400'
+        return response
+    except Exception as e:
+        print(e)
+        return "401"
+    
+@app.route('/users/<userid>/<filename>')
+def users(userid, filename):
+    try: 
+        directory = os.path.abspath(f'../storage/static/users/{userid}')
+        filename = escape(filename)
+        response = send_from_directory(directory, filename)
+        response.headers['Cache-Control'] = 'public, max-age=86400'
+        return response
+    except Exception as e:
+        print(e)
+        return "401"
+    
+# ------------------------------------------------------
+# Main - API - User
+# ------------------------------------------------------
+
+@app.route('/api/user/updateUser', methods=['POST'])
+def updateUserAPI():
+    # Get cookies from request
+    tokenInput = request.cookies.get('token')
+    userEmail = request.cookies.get('email')
+
+    try:
+        # Check if the token is valid
+        user = getUserByToken(tokenInput)
+        # Check if the email is valid
+        if user['userEmail'] != userEmail:
+            return "401"
+    except Exception as e:
+        return "401"
+
+    try:
+        params = {}
+
+        try:
+            json = request.get_json()
+            print(json)
+        except Exception as e:
+            return "401"
+
+        # Get the data
+        try:
+            userName = json['userName']
+            params['userName'] = userName
+        except Exception as e:
+            pass
+
+        try:
+            userDisplayName = json['userDisplayName']
+            params['userDisplayName'] = userDisplayName
+        except Exception as e:
+            pass
+
+        try:
+            userEmail = json['userEmail']
+            params['userEmail'] = userEmail
+
+            # Check if it's a valid email with a regex (?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])
+            if not re.match(r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])", userEmail):
+                return "401"
+
+        except Exception as e:
+            pass
+
+        print(params)
+
+        # Update the user
+        updateUser(user['userID'], **params)
+        return "200"
+    except Exception as e:
+        print(e)
+        return "401"
+
+@app.route('/api/user/updateAvatar', methods=['POST'])
+def updateAvatar():
+    # Get cookies from request
+    tokenInput = request.cookies.get('token')
+    userEmail = request.cookies.get('email')
+
+    try:
+        # Check if the token is valid
+        user = getUserByToken(tokenInput)
+        # Check if the email is valid
+        if user['userEmail'] != userEmail:
+            return "401"
+    except Exception as e:
+        return "401"
+
+    try:
+        # Get the file
+        file = request.files['avatar']
+
+        # Resize the image to 256x256
+        
+        img = Image.open(file)
+        img = img.resize((256, 256))
+
+        # Save the image
+        # Make sure the user's directory exists
+        if not os.path.exists(f'../storage/static/users/{user["userID"]}'):
+            os.makedirs(f'../storage/static/users/{user["userID"]}')
+
+        img.save(f'../storage/static/users/{user["userID"]}/avatar.png')
+
+        # Update the user's icon
+        updateUser(user['userID'], userIcon=f'/users/{user["userID"]}/avatar.png')
+
+        # Make response to tell the client to forget the cache
+        response = make_response("200")
+        response.headers['Cache-Control'] = 'no-store'
+        return response
+    except Exception as e:
+        print(e)
+        return "401"
 
 # ------------------------------------------------------
 # Run

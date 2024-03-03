@@ -3,9 +3,11 @@ litellm
 replicate
 flask
 flask-htmx
+Flask-SocketIO
 docker
 tinydb
 bs4
 pyPDF2
 mistune
 tavily-python
+Pillow
