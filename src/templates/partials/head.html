@@ -21,3 +21,12 @@
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.5.0"></script>
 </head>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const theme = document.cookie.split('; ').find(row => row.startsWith('theme=')).split('=')[1];
+        if (theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+    });
+</script>

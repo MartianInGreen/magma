@@ -88,6 +88,7 @@ def login():
             response = make_response(redirect(f'/notes/{userID}'))
             response.set_cookie('token', tokenInput)
             response.set_cookie('email', userEmail)
+            response.set_cookie('theme', 'dark')
             return response
         except Exception as e:
             print(e)
