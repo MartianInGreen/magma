@@ -3,6 +3,9 @@ storage/chats/*
 storage/tools/*
 storage/notes/*
 storage/*.json
+storage/static/css/*
+storage/static/js/*
+storage/static/users/*
 
 test/
 

@@ -7,8 +7,29 @@
         <title>Magma</title>
     {% endif %}
     <!-- <link rel="icon" href="/images/favicon.ico"> -->
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link id="style" href="" rel="stylesheet" type="text/css" src="/css/full.min.css"/>
+    <script id="styleScript" src="/js/tailwindcss.js" onload="console.log('Loaded')"></script>
+    <!-- HTMX -->
+    <script id="htmxScript" src="/js/htmx.js"></script>
+    <script>
+        // Modify the href of the CSS file
+        var cssLink = document.getElementById('style');
+        if (cssLink) {
+            cssLink.href = window.location.origin + '/css/full.min.css';
+        }
+
+        // Modify the src of the Tailwind CSS script
+        var tailwindScript = document.getElementById('styleScript');
+        if (tailwindScript) {
+            tailwindScript.src = window.location.origin + '/js/tailwindcss.js';
+        }
+
+        // Modify the src of the HTMX script
+        var htmxScript = document.getElementById('htmxScript');
+        if (htmxScript) {
+            htmxScript.src = window.location.origin + '/js/htmx.js';
+        }
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
@@ -18,8 +39,7 @@
             document.getElementsByTagName('head')[0].appendChild(link);
         });
     </script>
-    <!-- HTMX -->
-    <script src="https://unpkg.com/htmx.org@1.5.0"></script>
+    
 </head>
 
 <script>

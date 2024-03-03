@@ -49,6 +49,7 @@ if [ $choice -eq 1 ]; then
         exit 1
     fi
     echo "Docker image for codeapi built."
+    cd ../../
 else
     echo "Pulling codeapi from dockerhub"
     docker pull martianhannah/codeapi
@@ -59,5 +60,15 @@ else
     fi
     echo "Codeapi pulled from dockerhub"
 fi
+
+# Get JS dependencies
+cd storage/static
+
+echo "Installing JS dependencies"
+curl https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css > css/full.min.css
+curl https://cdn.tailwindcss.com/3.4.1 > js/tailwindcss.js
+curl https://unpkg.com/htmx.org@1.5.0/dist/htmx.min.js > js/htmx.js
+
+cd ../../
 
 echo "Backend installed successfully"
