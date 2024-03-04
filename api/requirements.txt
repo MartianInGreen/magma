@@ -2,7 +2,6 @@ openai
 litellm
 replicate
 flask
-flask-htmx
 Flask-SocketIO
 docker
 tinydb
@@ -11,3 +10,4 @@ pyPDF2
 mistune
 tavily-python
 Pillow
+jsonify

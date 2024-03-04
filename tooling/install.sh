@@ -14,7 +14,7 @@ fi
 
 # Create venv
 echo "Creating venv"
-python3 -m venv src
+python3 -m venv api
 if [ $? -ne 0 ]; then
     echo "Error: Failed to create python venv." >&2
     exit 1
@@ -22,7 +22,7 @@ fi
 
 # Install requirements
 echo "Installing python requirements"
-source src/bin/activate
+source api/bin/activate
 echo "Current working directory: $(pwd)"
 pip install -r requirements.txt 
 if [ $? -ne 0 ]; then
@@ -60,15 +60,5 @@ else
     fi
     echo "Codeapi pulled from dockerhub"
 fi
-
-# Get JS dependencies
-cd storage/static
-
-echo "Installing JS dependencies"
-curl https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css > css/full.min.css
-curl https://cdn.tailwindcss.com/3.4.1 > js/tailwindcss.js
-curl https://unpkg.com/htmx.org@1.5.0/dist/htmx.min.js > js/htmx.js
-
-cd ../../
 
 echo "Backend installed successfully"
