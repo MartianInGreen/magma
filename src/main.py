@@ -206,6 +206,7 @@ def settings(part):
                     params['userEmail'] = user['userEmail']
                     params['userId'] = user['userID']
                     params['avatarIcon'] = user['userIcon']
+                    params['tokens'] = user['tokens']
                 except Exception as e:
                     return redirect('/login')
 
@@ -275,7 +276,15 @@ def users(userid, filename):
     except Exception as e:
         print(e)
         return "401"
+
+# ------------------------------------------------------
+# Main - API - AI
+# ------------------------------------------------------
     
+@app.route('/api/ai/assistant', methods=['GET', 'POST'])
+def assistantAPI():
+    pass
+
 # ------------------------------------------------------
 # Main - API - User
 # ------------------------------------------------------

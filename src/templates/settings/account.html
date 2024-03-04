@@ -31,7 +31,30 @@
             <div class="flex-grow"></div>
             <input id="userEmail" type="text" value="{{ userEmail }}" class="input input-bordered w-full max-w-xs mr-4 ml-4" />
         </div>
+
+        <div class="h-20"></div>
+
+        <div class="flex justify-center">
+            <div tabindex="0" class="collapse collapse-arrow border border-base-300 bg-base-200 mt-4 w-[80%]">
+                <input type="checkbox" /> 
+                <div class="collapse-title text-xl font-medium">
+                    <div class="flex justify-start items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
+                                                
+                        <h1 class="ml-2 font-bold"> Tokens </h1>
+                        <span id="toolLoadingIndicator-{{ toolCallID }}" class="loading loading-dots loading-sm" style="display: none;"></span>
+                    </div>
+                </div>
+                <div class="collapse-content"> 
+                    <div class="rounded-box bg-base-100">
+                        {{ tokens }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+
     <div id="emailNotValid" class="flex justify-center items-center" style="display: none;">
         <div role="alert" class="alert alert-error mb-10 w-full w-[80%]">
             <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
