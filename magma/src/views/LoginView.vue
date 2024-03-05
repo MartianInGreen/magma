@@ -8,7 +8,7 @@
             <input v-model="token" name="token" id="tokenInput" type="password" placeholder="Login-Token" class="input input-borderd py-2 px-4 rounded mt-4">              
             <div class="flex mt-4"> 
                 <button type="submit" class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Login</button>
-                <button type="button" class="btn bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" @click="window.location.href = '/sign-up'">Sign Up</button>
+                <button type="button" class="btn bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" @click="goToSignUp">Sign Up</button>
             </div> 
         </form>
     </div>
@@ -41,6 +41,9 @@ export default {
             const value = `; ${document.cookie}`;
             const parts = value.split(`; ${name}=`);
             if (parts.length === 2) return parts.pop().split(';').shift();
+        },
+        goToSignUp() {
+            this.$router.push('/signup');
         },
         async handleSubmit() {
             const response = await fetch(`${config.API_ENDPOINT}/api/auth/login`, {

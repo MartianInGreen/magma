@@ -4,20 +4,20 @@
         <div class="w-[80%] flex flex-row justify-center items-center mx-auto h-full">
             <ul class="menu bg-base-200 w-[20%] rounded-box h-full overflow-auto">
                 <p class="text-1xl font-bold mb-2">Options</p>
-                <li><a>General</a></li>
-                <li><a>Editor</a></li>
-                <li><a>AI</a></li>
-                <li><a>Files and links</a></li>
-                <li><a>Appearance</a></li>
+                <li><a @click="changeView('Empty')">General</a></li>
+                <li><a @click="changeView('Empty')">Editor</a></li>
+                <li><a @click="changeView('Empty')">AI</a></li>
+                <li><a @click="changeView('Empty')">Files and links</a></li>
+                <li><a @click="changeView('Empty')">Appearance</a></li>
                 <li><a @click="changeView('Account')">Account</a></li>
-                <li><a>Plugins</a></li>
+                <li><a @click="changeView('Empty')">Plugins</a></li>
                 <div class="divider"></div>
                 <div class="flex grow"></div>
                 <div class="divider"></div>
                 <li><a @click="clearCookies" class="mb-4">Logout</a></li>
             </ul>
             <div class="divider divider-horizontal"></div>
-            <div id="settingsView" class="bg-base-200 w-[80%] h-full overflow-auto">
+            <div id="settingsView" class="bg-base-200 w-[80%] h-full overflow-auto rounded-lg">
                 <component :is="currentView"></component>
             </div>    
         </div>
@@ -26,11 +26,13 @@
 
 <script>
 import Account from '../settingsViews/Account.vue';
+import Empty from '../Empty.vue';
 import config from '@/config.js';
 
 export default {
     components: {
-        Account
+        Account,
+        Empty
     },
     data() {
         return {
@@ -48,6 +50,9 @@ export default {
             document.cookie = 'userID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
             window.location.href = '/login';
         }
+    },
+    mounted() {
+        this.changeView('Empty');
     }
 }
 </script>

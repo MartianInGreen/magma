@@ -13,7 +13,7 @@ from flask_cors import CORS
 from markupsafe import escape
 from PIL import Image
 
-import os, re
+import os, re, uuid
 
 from api.users import createUser, getUser, updateUser, getUserByToken
 from aiTooling.assistants import getAssistant, callAssistant, listAssistants, updateAssistant, deleteAssistant
@@ -58,7 +58,7 @@ def loginAPI():
             return {'error': 'Unauthorized'}, 401
     except Exception as e:
         print(e)
-        return {'error': 'Error'}, 401
+        return {'error': 'Error'}, 500
 
 @app.route('/api/auth/register', methods=['POST'])
 def registerAPI():
@@ -86,7 +86,7 @@ def images(filename):
         return response
     except Exception as e:
         print(e)
-        return {'error': 'Error'}, 401
+        return {'error': 'Error'}, 500
     
 @app.route('/users/<userid>/<filename>')
 def users(userid, filename):
@@ -98,7 +98,7 @@ def users(userid, filename):
         return response
     except Exception as e:
         print(e)
-        return {'error': 'Error'}, 401
+        return {'error': 'Error'}, 500
 
 # ------------------------------------------------------
 # Main - API - AI
@@ -122,7 +122,7 @@ def getUserAPI():
         return user, 200
     except Exception as e:
         print(e)
-        return {'error': 'Error'}, 401
+        return {'error': 'Error'}, 500
 
 @app.route('/api/user/updateUser', methods=['POST'])
 def updateUserAPI():
@@ -134,7 +134,7 @@ def updateUserAPI():
         user = getUserByToken(tokenInput)
         # Check if the email is valid
     except Exception as e:
-        return {'error': 'Error'}, 401
+        return {'error': 'Error'}, 400
 
     try:
         params = {}
@@ -143,7 +143,7 @@ def updateUserAPI():
             json = request.get_json()
             print(json)
         except Exception as e:
-            return {'error': 'Error'}, 401
+            return {'error': 'Error'}, 400
 
         # Get the data
         try:
@@ -164,7 +164,7 @@ def updateUserAPI():
 
             # Check if it's a valid email with a regex (?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])
             if not re.match(r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])", userEmail):
-                return {'error': 'Error, Invalid email.'}, 401
+                return {'error': 'Error, Invalid email.'}, 400
 
         except Exception as e:
             pass
@@ -178,23 +178,57 @@ def updateUserAPI():
         print(e)
         return {'error': 'Error'}, 401
 
+@app.route('/api/user/createUser', methods=['POST'])
+def createUserAPI():
+    try:
+        # Get the data
+        json = request.get_json()
+
+        print(json)
+
+        userName = json['userName']
+        userDisplayName = json['userDisplayName']
+        userEmail = json['userEmail']
+        userEmail = userEmail.lower()
+
+        print(userEmail)
+
+        # Check if it's a valid email with a regex (?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])
+        if not re.match(r"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])", userEmail):
+                print('Email did not match regex: ' + userEmail)
+                return {'error': 'Error, Invalid email.'}, 400
+        
+        # Create the user
+        status, userID, userToken = createUser(userEmail=userEmail, userDisplayName=userDisplayName, userName=userName)
+        if status:
+            user = getUserByToken(userToken)
+            return user, 200
+        else:
+            return {'error': 'Error, could not create user.'}, 400
+    except Exception as e:
+        print(e)
+        return {'error': 'Error'}, 500
+
 @app.route('/api/user/updateAvatar', methods=['POST'])
 def updateAvatar():
     # Get cookies from request
-    tokenInput = request.cookies.get('token')
-    userEmail = request.cookies.get('email')
+    auth = request.headers['Authorization']
+    tokenInput = auth.split(" ")[1]
 
     try:
         # Check if the token is valid
+        print(tokenInput)
         user = getUserByToken(tokenInput)
+        print(user)
         # Check if the email is valid
-        if user['userEmail'] != userEmail:
+        if tokenInput not in user['tokens']:
             return {'error': 'Error'}, 401
     except Exception as e:
-        return {'error': 'Error'}, 401
+        return {'error': 'Error, failed Validation.'}, 401
 
     try:
         # Get the file
+        print(request)
         file = request.files['avatar']
 
         # Resize the image to 256x256
@@ -207,10 +241,17 @@ def updateAvatar():
         if not os.path.exists(f'../storage/users/{user["userID"]}'):
             os.makedirs(f'../storage/users/{user["userID"]}')
 
-        img.save(f'../storage/users/{user["userID"]}/avatar.png')
+        # Delete old avatars
+        for file in os.listdir(f'../storage/users/{user["userID"]}'):
+            if file.startswith('avatar-'):
+                os.remove(f'../storage/users/{user["userID"]}/{file}')
+
+        avatarID = uuid.uuid4().hex
+
+        img.save(f'../storage/users/{user["userID"]}/avatar-{avatarID}.png')
 
         # Update the user's icon
-        updateUser(user['userID'], userIcon=f'/users/{user["userID"]}/avatar.png')
+        updateUser(user['userID'], userIcon=f'/users/{user["userID"]}/avatar-{avatarID}.png')
 
         # Make response to tell the client to forget the cache
         response = make_response("200")
@@ -218,7 +259,7 @@ def updateAvatar():
         return response
     except Exception as e:
         print(e)
-        return {'error': 'Error'}, 401
+        return {'error': 'Error, failed to update image.'}, 500
 
 # ------------------------------------------------------
 # Run

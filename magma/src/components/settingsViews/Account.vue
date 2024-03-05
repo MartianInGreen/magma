@@ -38,7 +38,9 @@ export default {
             if (!data.userIcon || data.userIcon === '' || data.userIcon === 'null' || data.userIcon === 'undefined') {
                 this.avatarIcon = config.API_ENDPOINT + '/images/avatar_small.png';
             } else {
-                this.avatarIcon = data.userIcon;
+                let timestamp = new Date().getTime();
+                this.avatarIcon = config.API_ENDPOINT + data.userIcon
+                console.log(this.avatarImageSrc)
             }
 
             this.userName = data.userName;
@@ -98,28 +100,21 @@ export default {
             var formData = new FormData();
             formData.append('avatar', this.avatarFile);
 
-            fetch('/api/user/updateAvatar', {
+            fetch(config.API_ENDPOINT + '/api/user/updateAvatar', {
                 method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + document.cookie.split('; ').find(row => row.startsWith('token=')).split('=')[1]
+                },
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                // Fetch the new avatar URL after successful update
-                fetch(config.API_ENDPOINT + '/api/user/avatarIcon', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': 'Bearer ' + document.cookie.split('; ').find(row => row.startsWith('token=')).split('=')[1]
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        // Update the avatar image source with the new URL
-                        this.avatarIcon = data.avatarIcon;
-                    })
-                    .catch(error => console.error(error));
+                .then(response => response.json())
+                .then(data => {
+                    this.fetchUserData();
                 })
                 .catch(error => console.error(error));
+        },
+        deleteChachedAvatarLocal() {
+
         }
     }
 }
