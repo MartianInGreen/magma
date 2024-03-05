@@ -61,4 +61,20 @@ else
     echo "Codeapi pulled from dockerhub"
 fi
 
+# Setting up Vue
+echo "Setting up Vue"
+cd magma
+npm install
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to install npm requirements." >&2
+    exit 1
+fi
+cd ..
+
 echo "Backend installed successfully"
+
+echo "To start the backend, run the following commands:"
+echo "source api/bin/activate"
+echo "cd api && python3 api/app.py"
+echo "To start the frontend, run the following commands:"
+echo "cd magma && npm run dev"

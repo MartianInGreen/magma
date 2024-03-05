@@ -29,7 +29,7 @@ As part of that plan we support (custom) Plugins (with many already build in), c
 **Version 0.1.0 - Cinder**
 - [ ] Basic UI 
   - [x] Login & Sign-Up
-  - [ ] Settings
+  - [x] Settings
   - [ ] Notes
 - [ ] Basic note-taking experience
   - [ ] Markdown input & rendering
@@ -44,11 +44,14 @@ As part of that plan we support (custom) Plugins (with many already build in), c
   - [ ] Basic Interface
   - [x] Code Interpreter
   - [x] Custom Tools
-
-**Version 0.2.0 - Shield**
-- [ ] Expanded UI
   - [ ] Search (Local & Web)
   - [ ] Chat
+- [ ] Backend API
+  - [ ] User Management
+  - [ ] Notes Management
+  - [ ] AI Calling
+
+**Version 0.2.0 - Shield**
 - [ ] Account protected Notes 
 - [ ] Expanding blocks
   - [ ] Video
@@ -115,7 +118,7 @@ This project is build using Python, you will also need Docker installed on your 
 
 > Currently installation under Windows is not supported, you can use WSL. Not yet deployment ready.
 
-Install [Python 3.11](https://www.python.org/) and [Docker](https://www.docker.com/).
+Install [Python 3.11](https://www.python.org/), [Node + npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), and [Docker](https://www.docker.com/).
 
 Clone this repository: 
 ```bash
